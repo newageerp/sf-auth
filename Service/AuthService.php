@@ -1,7 +1,7 @@
 <?php
 namespace Newageerp\SfAuth\Service;
 
-use Newageerp\SfAuth\Iterface\IAuthService;
+use Newageerp\SfAuth\Interface\IAuthService;
 use Newageerp\SfBaseEntity\Object\BaseUser;
 
 class AuthService implements IAuthService

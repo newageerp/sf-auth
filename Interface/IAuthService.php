@@ -1,5 +1,5 @@
 <?php
-namespace Newageerp\SfAuth\Iterface;
+namespace Newageerp\SfAuth\Interface;
 
 interface IAuthService
 {
