@@ -5,5 +5,5 @@ services:
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
   # Helpers
-  Newageerp\SfAuth\Controller:
+  Newageerp\SfAuth\Controller\AuthController:
     arguments: []
