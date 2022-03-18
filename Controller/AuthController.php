@@ -51,8 +51,8 @@ class AuthController extends OaBaseController
                 $user->setLogin('info@newageerp.com');
                 $user->setEmail('info@newageerp.com');
                 $user->setPlainPassword('123456');
-                $this->em->persist($user);
-                $this->em->flush();
+                $this->getEm()->persist($user);
+                $this->getEm()->flush();
 
                 return $this->json(['success' => true]);
             }
