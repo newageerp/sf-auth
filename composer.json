@@ -1,0 +1,23 @@
+{
+  "name": "newageerp/sf-auth",
+  "type": "symfony-bundle",
+  "autoload": {
+    "psr-4": {
+      "Newageerp\\SfAuth\\": ""
+    }
+  },
+  "require": {
+    "doctrine/orm": "^2",
+    "nelmio/api-doc-bundle": "^4",
+    "symfony/framework-bundle": "^5.0",
+    "newageerp/sf-base-entity": "^0",
+    "firebase/php-jwt": "^5.4"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Arturas Jegorenkovas",
+      "email": "info@newageerp.com"
+    }
+  ]
+}
