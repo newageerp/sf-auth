@@ -8,6 +8,8 @@ use Firebase\JWT\JWT;
 use Newageerp\SfBaseEntity\Controller\OaBaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use OpenApi\Annotations as OA;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(path="/app/nae-core/auth")
