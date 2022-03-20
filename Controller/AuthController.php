@@ -124,12 +124,12 @@ class AuthController extends OaBaseController
 
         try {
             if ($user = $this->findUser($request)) {
-                $userData = [
-                    'id' => $user->getId(),
-                    'email' => $user->getEmail(),
-                    'fullName' => $user->getFullName(),
-                ];
-                return $this->json($userData);
+//                $userData = [
+//                    'id' => $user->getId(),
+//                    'email' => $user->getEmail(),
+//                    'fullName' => $user->getFullName(),
+//                ];
+                return $this->json($user);
             }
         } catch (\Exception $e) {
             $response = $this->json([
