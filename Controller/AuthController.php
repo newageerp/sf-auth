@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Firebase\JWT\JWT;
 use Newageerp\SfBaseEntity\Controller\OaBaseController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Annotations as OA;
@@ -27,9 +28,9 @@ class AuthController extends OaBaseController
      * AuthController constructor.
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher)
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $eventDispatcher);
         $this->userRepository = $entityManager->getRepository($this->className);
     }
 
