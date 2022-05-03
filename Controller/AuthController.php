@@ -84,7 +84,7 @@ class AuthController extends OaBaseController
             $username = trim($request->get('username'));
             $password = trim($request->get('password'));
 
-            $user = $this->userRepository->findOneBy(['login' => $username]);
+            $user = $this->userRepository->findOneBy(['login' => $username, 'disabled' => false]);
 
             if (!$password || !$username) {
                 throw new \Exception('Fill required fields');
