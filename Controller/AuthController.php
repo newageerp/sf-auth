@@ -6,11 +6,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use Firebase\JWT\JWT;
 use Newageerp\SfBaseEntity\Controller\OaBaseController;
+use Newageerp\SfMailjet\Service\MailjetService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Annotation\Route;
+use Mailjet\Client;
+use Mailjet\Resources;
+
 
 /**
  * @Route(path="/app/nae-core/auth")
@@ -24,14 +28,17 @@ class AuthController extends OaBaseController
      */
     protected ObjectRepository $userRepository;
 
+    protected MailjetService $mailjetService;
+
     /**
      * AuthController constructor.
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher)
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher, MailjetService $mailjetService)
     {
         parent::__construct($entityManager, $eventDispatcher);
         $this->userRepository = $entityManager->getRepository($this->className);
+        $this->mailjetService = $mailjetService;
     }
 
     /**
@@ -114,6 +121,64 @@ class AuthController extends OaBaseController
     }
 
     /**
+     * @Route(path="/remind", methods={"POST"})
+     * @param Request $request
+     * @return Response
+     */
+    public function remind(Request $request): Response
+    {
+        try {
+            $request = $this->transformJsonBody($request);
+
+            $username = trim($request->get('username'));
+
+            $user = $this->userRepository->findOneBy(['login' => $username, 'disabled' => false]);
+            if (!$user) {
+                $user = $this->userRepository->findOneBy(['email' => $username, 'disabled' => false]);
+            }
+            if ($user) {
+                $password = $this->randomStr(6);
+                $user->setPlainPassword($password);
+                $this->em->flush();
+
+
+                $mj = $this->mailjetService->getClient();
+                $body = [
+                    'Messages' => [
+                        [
+                            'From' => [
+                                'Email' => $_ENV['NAE_SFS_MAILJET_DEFAULT_SENDER'],
+                                'Name' => "NewAgeErp"
+                            ],
+                            'To' => [
+                                [
+                                    'Email' => $user->getEmail(),
+                                ]
+                            ],
+                            'TemplateID' => 3957691,
+                            'Variables' => [
+                                'login' => $user->getLogin(),
+                                'password' => $password,
+                            ]
+                        ]
+                    ]
+                ];
+                $response = $mj->post(Resources::$Email, ['body' => $body]);
+            }
+            return $this->json(['success' => 1]);
+        } catch (\Exception $e) {
+            $response = $this->json([
+                'description' => $e->getMessage(),
+                'f' => $e->getFile(),
+                'l' => $e->getLine()
+
+            ]);
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            return $response;
+        }
+    }
+
+    /**
      * @OA\Post (operationId="NAEauthGetProfile")
      * @Route(path="/get", methods={"POST"})
      * @param Request $request
@@ -149,5 +214,21 @@ class AuthController extends OaBaseController
         ]);
         $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         return $response;
+    }
+
+    public function randomStr(
+        $length,
+        $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    )
+    {
+        $str = '';
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        if ($max < 1) {
+            throw new \Exception('$keyspace must be at least two characters long');
+        }
+        for ($i = 0; $i < $length; ++$i) {
+            $str .= $keyspace[random_int(0, $max)];
+        }
+        return $str;
     }
 }
