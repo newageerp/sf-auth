@@ -159,6 +159,7 @@ class AuthController extends OaBaseController
                             'Variables' => [
                                 'login' => $user->getLogin(),
                                 'password' => $password,
+                                'link' => $_ENV['NAE_SFS_FRONT_URL']
                             ]
                         ]
                     ]
