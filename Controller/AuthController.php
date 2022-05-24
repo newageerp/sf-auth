@@ -142,7 +142,7 @@ class AuthController extends OaBaseController
                 $this->em->flush();
 
 
-                $mj = $this->mailjetService->getClient();
+                $mj = $this->mailjetService->getClientV31();
                 $body = [
                     'Messages' => [
                         [
