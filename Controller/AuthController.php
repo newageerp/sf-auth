@@ -206,7 +206,7 @@ class AuthController extends OaBaseController
                 'l' => $e->getLine()
 
             ]);
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+//            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
             return $response;
         }
 
@@ -215,7 +215,7 @@ class AuthController extends OaBaseController
             'description' => "Wrong token",
 
         ]);
-        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+//        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         return $response;
     }
 
