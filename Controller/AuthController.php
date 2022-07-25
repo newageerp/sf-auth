@@ -200,6 +200,7 @@ class AuthController extends OaBaseController
             }
         } catch (\Exception $e) {
             $response = $this->json([
+                'id' => -1,
                 'description' => $e->getMessage(),
                 'f' => $e->getFile(),
                 'l' => $e->getLine()
@@ -210,6 +211,7 @@ class AuthController extends OaBaseController
         }
 
         $response = $this->json([
+            'id' => -1,
             'description' => "Wrong token",
 
         ]);
