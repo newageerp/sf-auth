@@ -12,7 +12,8 @@
     "symfony/framework-bundle": "^5.0",
     "newageerp/sf-base-entity": "^0",
     "firebase/php-jwt": "^5.4",
-    "doctrine/annotations": "^1.13"
+    "doctrine/annotations": "^1.13",
+    "symfony/serializer": "^5.0"
   },
   "license": "MIT",
   "authors": [
