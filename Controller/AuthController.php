@@ -14,7 +14,8 @@ use OpenApi\Annotations as OA;
 use Symfony\Component\Routing\Annotation\Route;
 use Mailjet\Client;
 use Mailjet\Resources;
-
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Newageerp\SfSocket\Service\SocketService;
 
 /**
  * @Route(path="/app/nae-core/auth")
@@ -34,9 +35,9 @@ class AuthController extends OaBaseController
      * AuthController constructor.
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher, MailjetService $mailjetService)
+    public function __construct(EntityManagerInterface $entityManager, EventDispatcherInterface $eventDispatcher, MailjetService $mailjetService, SocketService $socketService)
     {
-        parent::__construct($entityManager, $eventDispatcher);
+        parent::__construct($entityManager, $eventDispatcher, $socketService);
         $this->userRepository = $entityManager->getRepository($this->className);
         $this->mailjetService = $mailjetService;
     }
@@ -196,7 +197,7 @@ class AuthController extends OaBaseController
 //                    'email' => $user->getEmail(),
 //                    'fullName' => $user->getFullName(),
 //                ];
-                return $this->json($user);
+                return $this->json($user, 200, [], [AbstractNormalizer::IGNORED_ATTRIBUTES => ['_viewTitle']]);
             }
         } catch (\Exception $e) {
             $response = $this->json([
